@@ -22,16 +22,19 @@ def compile_into_ast(src_path):
         # Multiple file contract
         src_data = {}
         first = True
-        for filename in os.listdir(src_path):
-            print(filename)
-            src_data[filename] = {"urls": os.path.join(src_path, filename)}
-            if first:
-                with open(os.path.join(src_path, filename), "r") as f:
-                    file_data = f.read()
-                    version = re.findall(
-                        r"pragma solidity [^0-9]*([0-9]*\.[0-9]*\.[0-9]*).*;", file_data
-                    )[0]
-                first = False
+
+        with open(os.path.join(src_path, ".mapping"), "r") as f:
+            file_mapping = json.load(f)
+            for filepath, filename in file_mapping.items():
+                src_data[filepath] = {"urls": [os.path.join(src_path, filename)]}
+                if first:
+                    with open(os.path.join(src_path, filename), "r") as f2:
+                        file_data = f2.read()
+                        version = re.findall(
+                            r"pragma solidity [^0-9]*([0-9]*\.[0-9]*\.[0-9]*).*;",
+                            file_data,
+                        )[0]
+                        first = False
     else:
         # Single file
         with open(src_path, "r") as f:
@@ -41,7 +44,6 @@ def compile_into_ast(src_path):
         version = re.findall(
             r"pragma solidity [^0-9]*([0-9]*\.[0-9]*\.[0-9]*).*;", src_data
         )[0]
-
     print(json.dumps(src_data))
     install_solc_pragma(version)
     set_solc_version_pragma(version)
@@ -52,7 +54,7 @@ def compile_into_ast(src_path):
         "settings": {"outputSelection": output_selection},
     }
 
-    compile_output = compile_standard(compiler_input, allow_paths="/")
+    compile_output = compile_standard(compiler_input, allow_paths="*")
     ast = compile_output["sources"][os.path.basename(src_path)]["ast"]
 
     with open(src_path, "rb") as file:

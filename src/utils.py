@@ -15,6 +15,7 @@ def get_contract_from_blockchain(address):
 
     if sourcecode[0]["SourceCode"][0] == "{":
         # Multiple files
+        file_mapping = {}
         src_path = f"{contract_dir}/contract_{address}/"
         if not os.path.exists(src_path):
             os.makedirs(src_path)
@@ -22,8 +23,12 @@ def get_contract_from_blockchain(address):
         src = json.loads(src)
         for filepath, file in src["sources"].items():
             filename = os.path.basename(filepath)
+            file_mapping[filepath] = filename
             with open(f"{src_path}{filename}", "w") as f:
                 f.write(file["content"])
+        # save the mappings
+        with open(os.path.join(src_path, ".mapping"), "w+") as f:
+            f.write(json.dumps(file_mapping))
     else:
         # Multiple files
         src_path = f"{contract_dir}/contract_{address}.sol"
