@@ -1,9 +1,14 @@
 import codecs
-import os
+import os, re
 from fnmatch import fnmatch
 
-from solc import compile_standard, get_solc_version_string
-from solc.main import strip_zeroes_from_month_and_day
+from solcx import (
+    compile_standard,
+    get_solc_version_string,
+    set_solc_version_pragma,
+    get_solc_version,
+    install_solc_pragma,
+)
 
 
 def compile_into_ast(src_path):
@@ -12,6 +17,17 @@ def compile_into_ast(src_path):
     _, src_name = os.path.split(src_path)
 
     output_selection = {"*": {"": ["ast"]}}
+
+    with open(src_path, "r") as f:
+        src_data = f.read()
+    version = re.findall(
+        r"pragma solidity [^0-9]*([0-9]*\.[0-9]*\.[0-9]*).*;", src_data
+    )[0]
+
+    print(version)
+    install_solc_pragma(version)
+    set_solc_version_pragma(version)
+    print(get_solc_version())
 
     compiler_input = {
         "language": "Solidity",

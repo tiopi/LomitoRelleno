@@ -49,6 +49,6 @@ def analyze_node(node):
 
 
 def check_body(body):
-    for statement in body['statements']:
+    for statement in body["statements"]:
         print("hello world")
         pprint(statement)

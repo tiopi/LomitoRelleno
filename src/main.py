@@ -5,9 +5,9 @@ import argparse
 import json
 
 
-parser = argparse.ArgumentParser(description='Analyze Tacos')
-parser.add_argument('--get-file', help='Use a local file path to analyze')
-parser.add_argument('--get-from-hash', help='Use a contract from etherscan.io')
+parser = argparse.ArgumentParser(description="Analyze Tacos")
+parser.add_argument("--get-file", help="Use a local file path to analyze")
+parser.add_argument("--get-from-hash", help="Use a contract from etherscan.io")
 
 args = parser.parse_args()
 
@@ -16,12 +16,9 @@ if __name__ == "__main__":
     # src = get_contract_from_blockchain("0x5F098176B4f96207b3dc7b257175208112147243")
     if args.get_from_hash:
         print(args)
-        src_path, _ = get_contract_from_blockchain(
-        args.get_from_hash
-        )
+        src_path, _ = get_contract_from_blockchain(args.get_from_hash)
     else:
         src_path = args.get_file
-
 
     ast = compile_into_ast(src_path)
 
