@@ -1,0 +1,3 @@
+py-solc
+py-etherscan-api
+requests
