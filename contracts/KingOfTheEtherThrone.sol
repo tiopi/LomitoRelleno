@@ -13,6 +13,7 @@
 // TODO - add a random reset?
 // TODO - add bitcoin bridge so agents can pay in bitcoin?
 // TODO - maybe allow different return payment address?
+pragma solidity ^0.2.1;
 
 contract KingOfTheEtherThrone {
 

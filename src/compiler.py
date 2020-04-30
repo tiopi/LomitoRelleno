@@ -38,11 +38,11 @@ def compile_into_ast(src_path):
     else:
         # Single file
         with open(src_path, "r") as f:
-            src_data = f.read()
+            src_file = f.read()
         _, src_name = os.path.split(src_path)
-        src_files = {src_name: {"urls": [src_path]}}
+        src_data = {src_name: {"urls": [src_path]}}
         version = re.findall(
-            r"pragma solidity [^0-9]*([0-9]*\.[0-9]*\.[0-9]*).*;", src_data
+            r"pragma solidity [^0-9]*([0-9]*\.[0-9]*\.[0-9]*).*;", src_file
         )[0]
     print(json.dumps(src_data))
     install_solc_pragma(version)
@@ -54,7 +54,7 @@ def compile_into_ast(src_path):
         "settings": {"outputSelection": output_selection},
     }
 
-    compile_output = compile_standard(compiler_input, allow_paths="*")
+    compile_output = compile_standard(compiler_input, allow_paths="/")
     ast = compile_output["sources"][os.path.basename(src_path)]["ast"]
 
     with open(src_path, "rb") as file:
