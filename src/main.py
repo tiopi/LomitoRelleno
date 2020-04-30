@@ -5,7 +5,8 @@ import json
 
 if __name__ == "__main__":
 	# src_path, _ = get_contract_from_blockchain("0x61935CbDd02287B511119DDb11Aeb42F1593b7EF")
-	# src = get_contract_from_blockchain("0x5F098176B4f96207b3dc7b257175208112147243")
-	src_path, _ = get_contract_from_blockchain("0xC39D185eE1256E10D5010722D359ec87301eb647")
+	# src_path, _ = get_contract_from_blockchain("0x5F098176B4f96207b3dc7b257175208112147243")
+	# src_path, _ = get_contract_from_blockchain("0xC39D185eE1256E10D5010722D359ec87301eb647")
+	src_path = "contracts/contract_0x5F098176B4f96207b3dc7b257175208112147243.sol"
 	ast = compile_into_ast(src_path)
-	analyze_ast(ast)
+	# analyze_ast(ast)

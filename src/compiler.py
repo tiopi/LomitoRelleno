@@ -1,9 +1,8 @@
 import codecs
-import os
+import os, re
 from fnmatch import fnmatch
 
-from solc import compile_standard, get_solc_version_string
-from solc.main import strip_zeroes_from_month_and_day
+from solcx import compile_standard, get_solc_version_string, set_solc_version_pragma, get_solc_version, install_solc_pragma
 
 def compile_into_ast(src_path):
 	# Convert to absolute path
@@ -12,6 +11,15 @@ def compile_into_ast(src_path):
 
 	output_selection = {"*":{"":["ast"]}}
 
+	with open(src_path, 'r') as f:
+		src_data = f.read()
+	version = re.findall(r'pragma solidity [^0-9]*([0-9]*\.[0-9]*\.[0-9]*).*;', src_data)[0]
+
+	print(version)
+	install_solc_pragma(version)
+	set_solc_version_pragma(version)
+	print(get_solc_version())
+
 	compiler_input = {
 		"language": 'Solidity',
 		'sources': {src_name: {'urls': [src_path]}},
@@ -19,6 +27,7 @@ def compile_into_ast(src_path):
 			'outputSelection': output_selection
 		}
 	}
+
 
 	compile_output = compile_standard(compiler_input, allow_paths='/')
 	ast = compile_output['sources'][os.path.basename(src_path)]['ast']
@@ -29,3 +38,4 @@ def compile_into_ast(src_path):
 	ast["_solc_version"] = get_solc_version_string()
 
 	return ast
+
