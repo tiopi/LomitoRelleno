@@ -24,7 +24,7 @@ def compile_into_ast(src_path):
         first = True
         for filename in os.listdir(src_path):
             print(filename)
-            src_data[filename] = {"urls": [os.path.join(src_path, filename)]}
+            src_data[filename] = {"urls": os.path.join(src_path, filename)}
             if first:
                 with open(os.path.join(src_path, filename), "r") as f:
                     file_data = f.read()
@@ -42,6 +42,7 @@ def compile_into_ast(src_path):
             r"pragma solidity [^0-9]*([0-9]*\.[0-9]*\.[0-9]*).*;", src_data
         )[0]
 
+    print(json.dumps(src_data))
     install_solc_pragma(version)
     set_solc_version_pragma(version)
 
